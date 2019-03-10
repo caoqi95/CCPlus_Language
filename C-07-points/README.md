@@ -176,7 +176,7 @@ int main ()
 执行结果如下：
 ```C
 Address: var[2] = 60ff04
-value: var[2] = 1000
+value: var[2] = 200
 Address: var[1] = 60ff00
 value: var[1] = 100
 Address: var[0] = 60fefc
