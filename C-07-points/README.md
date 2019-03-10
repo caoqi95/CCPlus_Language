@@ -102,3 +102,127 @@ if(!ptr)    /* 如果 p 为空，则完成 */
 ```
 
 ## C 指针的算术运算
+
+C 指针是一个用数值表示的地址。因此，可以对指针执行算术运算。即可以对指针进行四种算术运算：++、--、+、-。
+```C
+ptr++;
+```
+
+### 指针递增
+我们喜欢在程序中使用指针代替数组，因为变量指针可以递增，而数组不能递增，因为数组是一个常量指针。下面的程序递增变量指针，以便顺序访问数组中的每一个元素：
+
+```C
+#include <stdio.h>
+
+const int MAX = 3;
+
+int main ()
+{
+   int  var[] = {10, 100, 200};
+   int  i, *ptr;
+
+   /* 指针中的数组地址 */
+   ptr = var;
+   for ( i = 0; i < MAX; i++)
+   {
+
+      printf("存储地址：var[%d] = %x\n", i, ptr );
+      printf("存储值：var[%d] = %d\n", i, *ptr );
+
+      /* 移动到下一个位置 */
+      ptr++;
+   }
+   return 0;
+}
+```
+执行结果如下：
+
+```C
+Address: var[0] = 60fefc
+value: var[0] = 10
+Address: var[1] = 60ff00
+value: var[1] = 100
+Address: var[2] = 60ff04
+value: var[2] = 200
+```
+
+### 指针递减
+同样地，对指针进行递减运算，即把值减去其数据类型的字节数，如下所示：
+
+```C
+#include <stdio.h>
+
+const int MAX = 3;
+
+int main ()
+{
+   int  var[] = {10, 100, 200};
+   int  i, *ptr;
+
+   /* 指针中最后一个元素的地址 */
+   ptr = &var[MAX-1];
+   for ( i = MAX; i > 0; i--)
+   {
+
+      printf("存储地址：var[%d] = %x\n", i-1, ptr );
+      printf("存储值：var[%d] = %d\n", i-1, *ptr );
+
+      /* 移动到下一个位置 */
+      ptr--;
+   }
+   return 0;
+}
+```
+执行结果如下：
+```C
+Address: var[2] = 60ff04
+value: var[2] = 1000
+Address: var[1] = 60ff00
+value: var[1] = 100
+Address: var[0] = 60fefc
+value: var[0] = 10
+```
+
+### 指针的比较
+
+指针可以用关系运算符进行比较，如 ==、< 和 >。如果 p1 和 p2 指向两个相关的变量，比如同一个数组中的不同元素，则可对 p1 和 p2 进行大小比较。
+
+下面的程序修改了上面的实例，只要变量指针所指向的地址小于或等于数组的最后一个元素的地址 &var[MAX - 1]，则把变量指针进行递增：
+
+```C
+#include <stdio.h>
+
+const int MAX = 3;
+
+int main ()
+{
+   int  var[] = {10, 100, 200};
+   int  i, *ptr;
+
+   /* 指针中第一个元素的地址 */
+   ptr = var;
+   i = 0;
+   while ( ptr <= &var[MAX - 1] )
+   {
+
+      printf("Address of var[%d] = %x\n", i, ptr );
+      printf("Value of var[%d] = %d\n", i, *ptr );
+
+      /* 指向上一个位置 */
+      ptr++;
+      i++;
+   }
+   return 0;
+}
+```
+
+执行结果如下：
+
+```C
+Address of var[0] = 60fefc
+Value of var[0] = 10
+Address of var[1] = 60ff00
+Value of var[1] = 100
+Address of var[2] = 60ff04
+Value of var[2] = 200
+```
