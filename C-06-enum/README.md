@@ -45,7 +45,7 @@ enum season {spring, summer=3, autumn, winter};
 
 枚举变量的定义有以下三种：
 
-##### 1. 先定义枚举类型，再定义枚举bmll
+##### 1. 先定义枚举类型，再定义枚举变量
 
 ```C
 enum DAY 
