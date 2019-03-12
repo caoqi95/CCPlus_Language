@@ -24,4 +24,5 @@ int main()
     printf("Line 3 - c is %d\n", c);
     printf("Line 4 - a is %d\n", a);  
 
+    return 0;
 }
