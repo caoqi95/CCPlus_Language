@@ -122,7 +122,7 @@ int main ()
    int  i, *ptr;
 
    /* 指针中的数组地址 */
-   ptr = var;
+   ptr = var; // 指向数组第一个元素
    for ( i = 0; i < MAX; i++)
    {
 
@@ -277,10 +277,9 @@ const int MAX = 4;
 int main ()
 {
    const char *names[] = {
-                   "Zara Ali",
-                   "Hina Ali",
-                   "Nuha Ali",
-                   "Sara Ali",
+                   "cao",
+                   "qi",
+                   "95",
    };
    int i = 0;
  
