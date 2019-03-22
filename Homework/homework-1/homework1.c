@@ -6,7 +6,7 @@ int charstrcmp(char *s, char *t);
 int initstrcmp(char *s, char *t);
 void swap(char **s, char **t);
 void bubble_sort(void *str[],int num, int (*compare)(char *, char *));
-void get_inout(char **str, int num);
+void get_input(char **str, int num);
 void print_out(char **str, int num);
 void free_pointer(char **str, int num);
 
