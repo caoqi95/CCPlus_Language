@@ -2,7 +2,7 @@
 #include <string.h>
 
 /*
-	function ptint_out(): print out the strings 
+	function print_out(): print out the strings 
 */
 
 void print_out(char *str[], int num)
