@@ -2,14 +2,58 @@
 #include <string.h>
 #include <conio.h>
 
+void get_input(char **str, int num);
+void print_out(char **str, int num);
+void free_pointer(char **str, int num);
 int charstrcmp(char *s, char *t);
 int initstrcmp(char *s, char *t);
 void swap(char **s, char **t);
 void bubble_sort(void *str[],int num, int (*compare)(char *, char *));
-void get_input(char **str, int num);
-void print_out(char **str, int num);
-void free_pointer(char **str, int num);
 
+
+/*
+	function get_input(): get the input string array
+*/ 
+void get_input(char **str, int num)
+{
+	char *tmp;
+	char tmp_str[100];
+	int i, j;
+	for(i=0; i<num; i++)
+	{
+		printf("\nPlease input the Number.%d string: \n", i+1);
+		scanf("%s", &tmp_str);
+		str[i] = (char *)malloc((strlen(tmp_str)+1)*sizeof(char));
+		strcpy(str[i], tmp_str);
+	}
+}
+
+
+/*
+	function ptint_out(): print out the strings 
+*/
+void print_out(char **str, int num)
+{	
+	int i;
+	for(i=0; i<num; i++)
+	{
+		printf("%s  ", str[i]);
+	}
+ } 
+ 
+
+/*
+	function free_point(): free used string pointers
+*/
+void free_pointer(char **str, int num)
+{
+	int i;
+	for(i=0;i<num;i++)
+	{
+		free(str[i]);		
+	}
+
+}
 
 /*
     function charstrcmp(): compare two strings based on ASCII
@@ -39,9 +83,12 @@ int initstrcmp(char *s, char *t)
 	
 	// if s and t are all negative
     if (s[i] == '-' && t[i] == '-' ) { sign =  -1; }
+    
+    // compare based on the length of  strings
     if(strlen(s) > strlen(t)) { return sign; }
 	if(strlen(s) < strlen(t)) { return -sign; } 
 		
+	// compare based on the value of strings
 	while(s[i] != '\0' || t[i] != '\0')
 	{
 		if(s[i] > t[i]) { return sign; }
@@ -85,47 +132,7 @@ void bubble_sort(void *str[], int num, int(*compare)(char *, char *))
 }
 
 
-/*
-	function get_input(): get the input string array
-*/ 
-void get_input(char **str, int num)
-{
-	char *tmp;
-	char tmp_str[100];
-	int i, j;
-	for(i=0; i<num; i++)
-	{
-		printf("\nPlease input the Number.%d string: \n", i+1);
-		scanf("%s", &tmp_str);
-		str[i] = (char *)malloc((strlen(tmp_str)+1)*sizeof(char));
-		strcpy(str[i], tmp_str);
-	}
-}
 
-/*
-	function output_strings(): output the string or the result of sorted string
-*/
-void print_out(char **str, int num)
-{	
-	int i;
-	for(i=0; i<num; i++)
-	{
-		printf("%s  ", str[i]);
-	}
- } 
-
-/*
-	function free_point(): free used string pointers
-*/
-void free_pointer(char **str, int num)
-{
-	int i;
-	for(i=0;i<num;i++)
-	{
-		free(str[i]);		
-	}
-
-}
 
 
 int main()
