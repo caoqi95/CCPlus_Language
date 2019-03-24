@@ -115,8 +115,8 @@ int main()
 	
 	// Choose sort method
 	int method;
-	printf("\n=================== Chose Method ====================\n");
-	printf("\nThere are two methods you can chose to sort:\n");
+	printf("\n=================== Choose Method ====================\n");
+	printf("\nThere are two methods you can choose to sort:\n");
 	printf("\n1.ASCII;\n2.Integer Value\n");
 	printf("\nPlease input the method number you wanted:\n");
 	scanf("%d",&method);
