@@ -60,7 +60,7 @@ double l_reqsts, double l_drpffs){
 		// fill the reward matrix rewards[max_morning] using the probability req_prob
 		for(int n=0; n < max_morning; n++){
 			satisfied_req = min(req, n); // at most, all the cars avaliable
-			rewards[n] += 10 * req_prob * satisfied_req; // + 10 is the reward per request
+			rewards[n] += 10 * req_prob * satisfied_req; // 10 is the reward per request
 		}
 		for (int drp=0; (drp_prob = poisson(drp, l_drpffs)) > theta; drp++){
 			// fill the probability matrix probs[max_morning][ncar_states] 
@@ -122,6 +122,7 @@ bool policy_improvement(){
 	for (int n1=0; n1 < ncar_states; n1++){
 		for (int n2=0; n2 < ncar_states; n2++){
 			b = policy[n1][n2];
+			// get a new policy
 			policy[n1][n2] = greedy_policy(n1, n2);
 			if (b != policy[n1][n2]){
 				has_changed = true;
@@ -145,7 +146,7 @@ int greedy_policy(int n1, int n2){
 	best_val = estimate_action(n1, n2, a);
 	for (a=a_min+1; a <= a_max; a++){
 		val = estimate_action(n1, n2, a);
-		if (val > best_val + pow(10, -9)){
+		if (val > best_val + theta){
 			best_val = val;
 			best_action = a;
 		}
@@ -165,6 +166,30 @@ void print_policy(){
 	printf("\n\n");
 }
 
+/*
+void print_prob_1(){
+	printf("\n");
+	for (int n1=0; n1 < max_morning; n1++){
+		printf("\n");
+		for (int n2=0; n2 <ncar_states; n2++){
+			printf("%.4f ", prob_1[n1][n2]);
+		}
+	}
+	printf("\n");
+} 
+
+void print_prob_2(){
+	printf("\n");
+	for (int n1=0; n1 < max_morning; n1++){
+		printf("\n");
+		for (int n2=0; n2 <ncar_states; n2++){
+			printf("%.4f ", prob_2[n1][n2]);
+		}
+	}
+	printf("\n");
+} 
+*/
+
 int main()
 {
 	double lambda_1r = 3.0; // request rate at location1 
@@ -173,8 +198,11 @@ int main()
 	double lambda_2d = 2.0; // Dropoff rate at location2
 	
 	// Initialization
-	load_probs_rewards(prob_1, rew_1, lambda_1r, lambda_1d); /* 1st locatoin */
+	load_probs_rewards(prob_1, rew_1, lambda_1r, lambda_1d); /* 1st location */
 	load_probs_rewards(prob_2, rew_2, lambda_2r, lambda_2d); /* 2nd location */
+	
+	//print_prob_1();
+	//print_prob_2();
 	
 	print_policy();
 	// Policy Iteration
@@ -184,11 +212,9 @@ int main()
 		policy_eval();
 		// improve the policy; assign true to has_changed if the policy changed, if it did not 
 		has_changed = policy_improvement();
-		// print policy result
+		// print policy results
 		print_policy();
 	} while (has_changed);
 
-	//getch();
-	
 	return 0;
 }
