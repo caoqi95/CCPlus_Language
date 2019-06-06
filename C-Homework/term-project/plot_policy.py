@@ -31,7 +31,7 @@ def txt2arr():
         real_nums.append(one_line_nums)
     
     # convert to array
-    policy_lists = [ real_nums[n*21:(n+1)*21] for n in range(int(len(real_nums)/21))]
+    policy_lists = [real_nums[n*21:(n+1)*21] for n in range(int(len(real_nums)/21))]
     policy_lists = np.array(policy_lists)
     
     return policy_lists
@@ -53,7 +53,7 @@ def plot_policy(policy):
         plt.title('Policy {}'.format(i))
         plt.xlabel("Cars at Location 2")
         plt.ylabel("Cars at Location 1")
-    plt.savefig('C:/Users/User/Desktop/result.jpg')
+    plt.savefig('C:/Users/User/Desktop/jack/result.jpg')
     plt.show()
     
 if __name__ == "__main__":
