@@ -3,7 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include <algorithm>
-#include <conio.h>
+
 
 using namespace std; /* for cleaner code (min and max functions) */
 
@@ -32,9 +32,9 @@ double poisson(int n, double l);
 void load_probs_rewards(double probs[max_morning][ncar_states], double rewards[max_morning], 
 double l_reqsts, double l_drpffs);
 void policy_eval();
-double backup_action(int n1, int n2, int a);
+double estimate_action(int n1, int n2, int a);
 int greedy_policy(int n1, int n2);
-bool update_policy_t();
+bool policy_improvement();
  
 /* function for Factorial: n! */
 double factorial(int n){
@@ -49,7 +49,7 @@ double poisson(int n, double lambda){
 	return (exp(-lambda)*pow(lambda, (double) n)/factorial(n));
 } 
 
-/* function for Initialize */
+/* function for Initialization */
 void load_probs_rewards(double probs[max_morning][ncar_states], double rewards[max_morning], 
 double l_reqsts, double l_drpffs){
 	double req_prob;
@@ -75,8 +75,28 @@ double l_reqsts, double l_drpffs){
 	}
 }
 
+/* function for Policy Eualuation */
+void policy_eval(){
+	double val_tmp;
+	double diff;
+	int a;
+	
+	do{
+		diff = 0.0;
+		for(int n1=0; n1 < ncar_states; n1++){
+			for (int n2=0; n2 < ncar_states; n2++){
+				// Assign the new value for each state; keep in diff the highest update difference
+				val_tmp = V[n1][n2];
+				a = policy[n1][n2];
+				V[n1][n2] = estimate_action(n1, n2, a);
+				diff = max(diff, fabs(V[n1][n2] - val_tmp));
+			}
+		}
+	} while (diff > theta);
+}
 
-double backup_action(int n1, int n2, int a){
+/* function for Estimation of Action Values */
+double estimate_action(int n1, int n2, int a){
 	double val; // determine the range of possible actions for the given state
 	a = min(a, +n1);
 	a = max(a, -n2);
@@ -95,28 +115,8 @@ double backup_action(int n1, int n2, int a){
 	return val;
 }
 
-/* function for Policy Eualuation */
-void policy_eval(){
-	double val_tmp;
-	double diff;
-	int a;
-	
-	do{
-		diff = 0.0;
-		for(int n1=0; n1 < ncar_states; n1++){
-			for (int n2=0; n2 < ncar_states; n2++){
-				// Assign the new value for each state; keep in diff the highest update difference
-				val_tmp = V[n1][n2];
-				a = policy[n1][n2];
-				V[n1][n2] = backup_action(n1, n2, a);
-				diff = max(diff, fabs(V[n1][n2] - val_tmp));
-			}
-		}
-	} while (diff > theta);
-}
-
-
-bool update_policy_t(){
+/* function for Policy Improvement */
+bool policy_improvement(){
 	int b;
 	bool has_changed = false;
 	for (int n1=0; n1 < ncar_states; n1++){
@@ -128,7 +128,7 @@ bool update_policy_t(){
 			}
 		}
 	}
-	return (has_changed);
+	return has_changed;
 }
 
 int greedy_policy(int n1, int n2){
@@ -142,17 +142,18 @@ int greedy_policy(int n1, int n2){
 	
 	a = a_min;
 	best_action = a_min;
-	best_val = backup_action(n1, n2, a);
+	best_val = estimate_action(n1, n2, a);
 	for (a=a_min+1; a <= a_max; a++){
-		val = backup_action(n1, n2, a);
+		val = estimate_action(n1, n2, a);
 		if (val > best_val + pow(10, -9)){
 			best_val = val;
 			best_action = a;
 		}
 	} 
-	return (best_action);
+	return best_action;
 }
 
+/* function for Print Policy */
 void print_policy(){
 	printf("\nPolicy:\n");
 	for (int n1=0; n1 < ncar_states; n1 ++){
@@ -182,7 +183,7 @@ int main()
 		// iterative policy evaluation 
 		policy_eval();
 		// improve the policy; assign true to has_changed if the policy changed, if it did not 
-		has_changed = update_policy_t();
+		has_changed = policy_improvement();
 		// print policy result
 		print_policy();
 	} while (has_changed);
